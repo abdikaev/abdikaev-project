@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Movies page</title>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            {% include 'header.html' %}
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h1 class="mt-4">Movie page</h1>
+            {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+            <form action="{% url 'index_page' %}" method="POST" class="my-2" autocomplete="off">
+                {% csrf_token %}
+                {{ form.errors }}
+                {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    <div class="text-danger">
+                        {{ field.errors }}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Create Movie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table mt-4">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if movies %}
+                {% for movie in movies %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ movie.id }}</td>
+                    <td>{{ movie.title }}</td>
+                    <td>
+                         <a href="{% url 'movie_details_page' pk=movie.id %}">
+                            <button class="btn btn-primary">Details</button>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        No movies yet
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

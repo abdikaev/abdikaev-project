@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie</title>
+</head>
+<body>
+    <form action="/movies/" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="field-wrapper">
+                {{ field.label_tag }} {{ field }}
+                {% if field.errors %}
+                    <div class="text-danger">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div>
+            <button type="submit">Watch Films</button>
+        </div>
+    </form>
+
+    <h1>Movie</h1>
+    {% if error %}
+        <p style="color: aqua">{{ error }}</p>
+    {% endif %}
+    {% if movies %}
+        <ol>
+            {% for movie in movies %}
+                <li>{{ movie.title }} -- {{ movie.duration }} KZT <a href="{% url 'delete_movie' movie.id %}">
+                    <button>Delete</button>
+                </a></li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>Movies Not Found</p>
+    {% endif %}
+</body>
+</html>
